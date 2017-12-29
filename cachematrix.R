@@ -24,13 +24,17 @@ makeCacheMatrix <- function(x = matrix()) {
 
 ##computes the inverse of a "matrix" using makeCacheMatrix
 cacheSolve <- function(x, ...) {
-  inv <- x$getinv()
-  if(!is.null(inv)) {
-    message("getting cached data")
+  data <- x$get()
+  if (nrow(data) == ncol(data))
+  {
+    inv <- x$getinv()
+    if(!is.null(inv)) {
+      message("getting cached data")
+      return(inv)
+    }
+    inv <- solve(data) #assuming that data is invertible
+    x$setinv(inv)
     return(inv)
   }
-  data <- x$get()
-  inv <- solve(data) #assuming that data is invertible
-  x$setinv(inv)
-  inv
+  message("Can not calculate the inverse. The matrix must be a square matrix")
 }
